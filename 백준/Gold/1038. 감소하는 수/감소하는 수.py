@@ -1,26 +1,17 @@
-N = int(input())+1  # 0은 0번째 감소하는 수여서 보정
+N = int(input())
 
-numbers = (9,8,7,6,5,4,3,2,1,0)
-decreasing_number = []
-number_arr = []
+que = [0,1,2,3,4,5,6,7,8,9]     # 감소하는 수가 들어갈 큐. 오름차순이 항상 유지되는 구조로 코드 작성.
+cnt = -1    # 몇 번째 감소하는 수인지 카운트
 
-# 9876543210 중에서 n개를 조합하여 decreasing_number에 추가하는 함수
-# 이 경우, n자리의 모든 감소하는 수가 생성되며, 조합 선택 순서에 따라 내림차순으로 생성됨
-def f(n, start):
-    if len(number_arr) == n:
-        decreasing_number.append(number_arr[:])
-        return
+while que:
+    num = que.pop(0)    # 큐에 있는 가장 작은 감소하는 수 pop
+    cnt += 1
+    if cnt == N:
+        print(num)      # N번째 감소하는 수면 출력하고 종료
+        break
     else:
-        for i in range(start,10):
-            number_arr.append(numbers[i])
-            f(n,i+1)
-            number_arr.pop()
-
-# 내림차순으로 모든 감소하는 수를 생성
-for i in range(10,0,-1):
-    f(i,0)
-
-if len(decreasing_number) < N:
+        for i in range(10):     # i는 0부터 9까지의 수
+            if i < num%10:      # 감소하는 수의 1의 자리보다 더 작은 i가 있다면,
+                que.append(num*10+i)        # 감소하는 수 뒤에 붙인다! 그럼 이것 역시 감소하는 수이다. 이건 찾은 것 중 가장 큰 수이다.
+else:       # break문이 실행되지 않았다면, N번째 감소하는 수가 존재하지 않는 것
     print(-1)
-else:
-    print(''.join(map(str,decreasing_number[-N])))
