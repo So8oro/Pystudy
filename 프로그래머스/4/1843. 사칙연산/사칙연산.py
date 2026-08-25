@@ -1,15 +1,30 @@
 def solution(arr):
-    arrs = ''.join(arr).split('-')
-    val0 = sum(list(map(int, arrs[0].split('+'))))
-    if len(arrs) == 1:
-        return val0
+    groups = ''.join(arr).split('-')
 
-    min_val = 0
-    max_val = 0
-    for arr in arrs[:0:-1]:
-        x = list(map(int, arr.split('+')))
-        _min_val = -(sum(x))
-        _max_val = sum(x[1:]) - x[0]
-        min_val, max_val = min(_min_val + min_val, _min_val - max_val), max(_max_val + max_val, _min_val - min_val)
+    first = sum(map(int, groups[0].split('+')))
 
-    return val0 + max_val
+    if len(groups) == 1:
+        return first
+
+    right_min = 0
+    right_max = 0
+
+    for group in groups[:0:-1]:
+        nums = list(map(int, group.split('+')))
+
+        group_min = -sum(nums)
+        group_max = sum(nums[1:]) - nums[0]
+
+        next_min = min(
+            group_min + right_min,
+            group_min - right_max
+        )
+
+        next_max = max(
+            group_max + right_max,
+            group_min - right_min
+        )
+
+        right_min, right_max = next_min, next_max
+
+    return first + right_max
